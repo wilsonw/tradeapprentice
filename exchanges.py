@@ -26,7 +26,7 @@ class MockExchange( object ):
         else:
             #this is base exchange
             self.mid_price = self.mid_price or BASE_MID_PRICE
-            self.mid_price = self._round( self.mid_price * ( 1 - ( MAX_VOLATILITY - self.rgen.random() * MAX_VOLATILITY * 2 ) / 100. ) )
+            self.mid_price = self._round( self.mid_price * ( 1 - ( MAX_VOLATILITY - self.rgen.random() * MAX_VOLATILITY * 2 - .1 ) / 100. ) )
         self.bid_price = self._round( self.mid_price - self.mid_price * ( BASE_SPREAD * self.rgen.random() ) / 100. )
         self.offer_price = self._round( self.mid_price + self.mid_price * ( BASE_SPREAD * self.rgen.random() ) / 100. )
         self.printStatus()
@@ -141,3 +141,9 @@ def main( numOfExchanges=2, numOfRound=1000 ):
         trade( allExchanges )
         totalCapital( allExchanges )
         count += 1
+
+
+def simulatePrice( numOfRound=1000 ):
+    ex = MockExchange( 0 )
+    for _ in xrange( numOfRound ):
+        ex.tick()
